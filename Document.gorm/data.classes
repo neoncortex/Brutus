@@ -1,0 +1,60 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    Document = {
+	Actions = (
+	    "saved:"
+	);
+	Outlets = (
+	    buffer,
+	    command
+	);
+	Super = NSDocument;
+    };
+    Editor = {
+	Actions = (
+	    "editEd:",
+	    "editCmd:",
+	    "clean:",
+	    "last:",
+	    "result:",
+	    "stop:",
+	    "openFromCommandAreaSelection:",
+	    "match:"
+	);
+	Outlets = (
+	    show,
+	    keep,
+	    command,
+	    buffer,
+	    commandIndicator
+	);
+	Super = NSObject;
+    };
+    FirstResponder = {
+	Actions = (
+	    "clean:",
+	    "editCmd:",
+	    "editEd:",
+	    "last:",
+	    "match:",
+	    "openFromCommandAreaSelection:",
+	    "result:",
+	    "saved:"
+	);
+	Super = NSObject;
+    };
+    NSTextViewCustom = {
+	Actions = (
+	);
+	Outlets = (
+	);
+	Super = NSTextView;
+    };
+    NewClass = {
+	Actions = (
+	);
+	Outlets = (
+	);
+	Super = NSObject;
+    };
+}

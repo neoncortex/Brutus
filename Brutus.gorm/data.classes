@@ -1,0 +1,18 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    Controller = {
+	Actions = (
+	    "name:"
+	);
+	Outlets = (
+	    menu
+	);
+	Super = NSDocumentController;
+    };
+    FirstResponder = {
+	Actions = (
+	    "name:"
+	);
+	Super = NSObject;
+    };
+}

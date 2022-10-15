@@ -71,7 +71,18 @@
 		stringWithContentsOfFile:file
 		encoding:NSUTF8StringEncoding
 		error:&contentError];
-		return content;
+	if (contentError != nil) {
+		contentError = 0;
+		[NSString
+			stringWithContentsOfFile:file
+			encoding:NSNEXTSTEPStringEncoding
+			error:&contentError];
+	}
+
+	if (contentError != nil) {
+		return nil;
+	}
+
 	return content;
 }
 

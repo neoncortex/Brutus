@@ -264,14 +264,8 @@
 	[command setString: lastResult];
 }
 
-- (void) openFromCommandAreaSelection: (id)sender
+- (void) performService:(NSArray *)a
 {
-	NSRange range = [command selectedRange];
-	NSArray *a = [[[command string]
-		substringWithRange:
-		NSMakeRange(range.location,
-		range.length)]
-		componentsSeparatedByString: @"\n"];
 	int i;
 	for (i = 0; i < [a count]; ++i) {
 		if ([[a objectAtIndex:i] isEqualToString: @""])
@@ -283,6 +277,17 @@
 		[p setString: [a objectAtIndex:i] forType:NSStringPboardType];
 		NSPerformService(@"Brutus", p);
 	}
+}
+
+- (void) openFromCommandAreaSelection: (id)sender
+{
+	NSRange range = [command selectedRange];
+	NSArray *a = [[[command string]
+		substringWithRange:
+		NSMakeRange(range.location,
+		range.length)]
+		componentsSeparatedByString: @"\n"];
+	[self performService:a];
 }
 
 - (void) match:(id)sender
@@ -311,15 +316,7 @@
 		if (input == nil)
 			return;
 
-		int i;
-		for (i = 0; i < [input count]; ++i) {
-			NSPasteboard *p = [NSPasteboard pasteboardWithUniqueName];
-			[p declareTypes: [NSArray arrayWithObject: NSStringPboardType]
-				owner: nil];
-			[p setString: [input objectAtIndex:i] forType:NSStringPboardType];
-			NSPerformService(@"Brutus", p);
-		}
-
+		[self performService:input];
 		return;
 	}
 

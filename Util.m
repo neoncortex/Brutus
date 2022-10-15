@@ -33,8 +33,7 @@
 
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if (!([fm fileExistsAtPath:file])
-		|| ((![[file substringToIndex:1] isEqualToString: @"/"])
-		&& (![[file substringToIndex:1] isEqualToString: @"~"])))
+		|| (![[file substringToIndex:1] isEqualToString: @"/"]))
 	{
 		NSString *documentPath = [[[NSDocumentController
 			sharedDocumentController] currentDocument]

@@ -12,6 +12,10 @@
 	NSString *tempFileName;
 	NSString *tempResult;
 	NSString *tempScript;
+	NSString *lastCommand;
+	NSString *lastResult;
+	NSTimer *timer;
+	NSTask *task;
 }
 
 - (void) editEd: (id)sender;

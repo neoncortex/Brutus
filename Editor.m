@@ -2,14 +2,9 @@
 
 #include <AppKit/AppKit.h>
 #import "Editor.h"
-#import "NSTextViewCustom.h"
+#import "TextView.h"
 #import "Util.h"
 #import "Document.h"
-
-NSString *lastCommand = @"";
-NSString *lastResult = @"";
-NSTimer *timer = nil;
-NSTask *task = nil;
 
 @implementation Editor
 
@@ -17,6 +12,10 @@ NSTask *task = nil;
 {
 	self = [super init];
 	[NSApp setServicesProvider:self];
+	lastCommand = @"";
+	lastResult = @"";
+	timer = nil;
+	task = nil;
 	tempFileName = @"/tmp/.brutus_temp";
 	tempResult = @"/tmp/.brutus_command_result";
 	tempScript = @"/tmp/.brutus_script.sh";
@@ -303,10 +302,32 @@ NSTask *task = nil;
 - (void) openFileWithPattern:(NSPasteboard *)pboard userData:(NSString *)
 	userData error:(NSString **)error
 {
-	NSString *input = [pboard 
-		stringForType:NSPasteboardTypeString];
+	id input = [pboard
+		stringForType:NSStringPboardType];
+
+	if (input == nil) {
+		input = [pboard
+			propertyListForType: NSFilenamesPboardType];
+		if (input == nil)
+			return;
+
+		int i;
+		for (i = 0; i < [input count]; ++i) {
+			NSPasteboard *p = [NSPasteboard pasteboardWithUniqueName];
+			[p declareTypes: [NSArray arrayWithObject: NSStringPboardType]
+				owner: nil];
+			[p setString: [input objectAtIndex:i] forType:NSStringPboardType];
+			NSPerformService(@"Brutus", p);
+		}
+
+		return;
+	}
+
 	Util *util = [[Util alloc] init];
 	NSArray *parsedFile = [util parseFile:input];
+	if (parsedFile == nil)
+		return;
+
 	NSString *filePath = [parsedFile objectAtIndex:0];
 	NSString *argument = [parsedFile objectAtIndex:1];
 	filePath = [util validateFile:filePath];

@@ -16,7 +16,7 @@ Brutus_OBJC_FILES = main.m \
 	Document.m \
 	Controller.m \
 	Editor.m \
-	NSTextViewCustom.m \
+	TextView.m \
 	Rtf.m \
 	Util.m
 

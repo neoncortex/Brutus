@@ -4,7 +4,7 @@
 #import "Document.h"
 #import "Rtf.h"
 #import "Util.h"
-#import "NSTextViewCustom.h"
+#import "TextView.h"
 
 @implementation Document
 

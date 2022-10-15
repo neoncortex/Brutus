@@ -101,6 +101,9 @@
 
 - (NSArray *)parseFile:(NSString *)input
 {
+	if (input == nil)
+		return nil;
+
 	NSString *argument = @"";
 	NSString *filePath = input;
 	int i, dotIndex = 0, escape = 0;

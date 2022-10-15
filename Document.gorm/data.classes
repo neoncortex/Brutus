@@ -43,18 +43,18 @@
 	);
 	Super = NSObject;
     };
-    NSTextViewCustom = {
-	Actions = (
-	);
-	Outlets = (
-	);
-	Super = NSTextView;
-    };
     NewClass = {
 	Actions = (
 	);
 	Outlets = (
 	);
 	Super = NSObject;
+    };
+    TextView = {
+	Actions = (
+	);
+	Outlets = (
+	);
+	Super = NSTextView;
     };
 }

@@ -28,6 +28,9 @@
 	if ([file substringFromIndex:[file length] -1] == @"\n")
 		file = [file substringToIndex:[file length] -1];
 
+	if ([file substringToIndex:1] == @"~")
+		file = [file stringByExpandingTildeInPath];
+
 	NSFileManager *fm = [NSFileManager defaultManager];
 	if (!([fm fileExistsAtPath:file])
 		|| ((![[file substringToIndex:1] isEqualToString: @"/"])

@@ -1,7 +1,7 @@
 .so macros.s
 
 .TL
-Brutus text editor user guide:
+Brutus text editor user guide
 .
 .NH
 Why?
@@ -206,6 +206,31 @@ You should see this:
 Where I selected \F[C]68\F[] in the commabd area, and clicked the Match button.
 .
 .NH
+Drag & Drop:
+.LP
+.I Brutus
+accepts
+.I "Drag & Drop"
+from other
+.B GNUstep
+applications.
+If you drag & drop a text file the text area, the contents of the dropped file will be copied.
+You can, also, copy the file name, insted of it's contents, by first holding the
+.I Shift
+key, then drag the file, and drop in the editor.
+Notice that you need to press, and hold the
+.I Shift
+key while the editor is focused, then you go to the other application, still holding
+.I Shift ,
+drag, and drop it in the editor.
+Notice, also, that the contents, or the name of the file being dropped will be placed in the current cursor position.
+.
+.LP
+This works with
+.I rtf
+files, too.
+.
+.NH
 The client:
 .LP
 In the directory
@@ -227,3 +252,28 @@ To open the file and search for a string, use:
 .CODE
 openapp BrutusClient /path/to/file/name:string
 .CODEE
+.
+.LP
+Notice that you need to pass the full path of the file.
+This program uses the
+.I "Brutus service" ,
+it's only function is provide access to that service to applications that are not written using
+.B GNUstep .
+The
+.I "Brutus service"
+is explained next.
+.
+.NH
+Brutus service
+.LP
+The Brutus editor provides a service, called
+.I Brutus ,
+that other
+.B GNUstep
+applications can use to open files.
+You can select a file in
+.B GWorkspace ,
+or some file name in the
+.B Terminal ,
+for example, andsend it to this service.
+These files will be opened for editing.

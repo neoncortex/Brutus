@@ -16,6 +16,7 @@
 - (id) init
 {
 	self = [super init];
+	[historyWindow _setVisible:NO];
 	return self;
 }
 
@@ -156,7 +157,7 @@
 	}
 
 	[[buffer window] makeFirstResponder:buffer];
-	[buffer setDirty:NO];
+	[[buffer window] setDocumentEdited:NO];
 	[self registerPasteboard];
 }
 
@@ -196,7 +197,8 @@
 	[[buffer window] setTitle: [self getDocumentPath]];
 	[rtf release];
 	[util release];
-	[buffer setDirty:NO];
+	[[buffer window] setDocumentEdited:NO];
+
 }
 
 - (void) saveDocument: (id)sender
@@ -221,7 +223,6 @@
 	}
 
 	[[buffer window] setDocumentEdited:NO];
-	[buffer setDirty:NO];
 }
 
 - (void) saveDocumentAs: (id)sender
@@ -246,7 +247,6 @@
 	[self setDocumentPath:path];
 	[[buffer window] setTitle: [self getDocumentPath]];
 	[[buffer window] setDocumentEdited:NO];
-	[buffer setDirty:NO];
 }
 
 - (void) saved: (id)sender
@@ -258,7 +258,6 @@
 			[buffer setString: content];
 			[[buffer textStorage] endEditing];
 			[[buffer window] setDocumentEdited:NO];
-			[buffer setDirty:NO];
 		}
 	} else {
 		NSRunAlertPanel(_(@"Error"),
@@ -274,7 +273,7 @@
 
 - (BOOL)isDocumentEdited
 {
-	return [buffer dirty];
+	return [buffer isDocumentEdited];
 }
 
 - (id) getBuffer
@@ -309,4 +308,5 @@
 	[pboard setString: name forType:NSStringPboardType];
 	[pboard setString: name forType:NSFilenamesPboardType];
 }
+
 @end

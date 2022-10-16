@@ -5,10 +5,10 @@
 @interface TextView : NSTextView
 {
 @private
-	BOOL edited;
 	BOOL isShiftPressed;
+	BOOL edited;
 }
-- (BOOL) dirty;
-- (void) setDirty:(BOOL) flag;
 
+- (BOOL) isDocumentEdited;
+- (void) setDocumentEdited: (BOOL) flag;
 @end

@@ -126,8 +126,7 @@
 		[[buffer textStorage] endEditing];
 	}
 
-	[[[buffer window] windowController] setDocumentEdited:YES];
-	[buffer setDirty:YES];
+	[buffer setDocumentEdited:YES];
 	[util release];
 }
 

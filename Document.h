@@ -8,8 +8,9 @@
 	id buffer;
 	id command;
 	id keep;
-	id fileToOpen;
+	id historyWindow;
 @private
+	id fileToOpen;
 	id argument;
 	id stringContent;
 	id stringRTFContent;

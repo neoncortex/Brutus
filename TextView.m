@@ -10,8 +10,8 @@
 - (id)init
 {
 	self = [super init];
-	edited = NO;
 	isShiftPressed = NO;
+	edited = NO;
 	return self;
 }
 
@@ -134,10 +134,6 @@
 		NSArray *files = [pboard propertyListForType:
 			NSFilenamesPboardType];
 		NSUndoManager *undo = [self undoManager];
-/*
-		NSString *oldContent = [[[NSString alloc]
-			initWithString:[self string]] autorelease];
-*/
 		NSData *bufferContent = [[[NSData alloc] initWithData:
 			[self RTFFromRange:NSMakeRange(0,
 			[[self textStorage] length])]]
@@ -146,11 +142,6 @@
 			[[[NSAttributedString alloc] initWithRTF:
 			bufferContent documentAttributes:NULL]
 			autorelease];
-/*
-		[undo registerUndoWithTarget:self
-			selector:@selector(setString:)
-			object:oldContent];
-*/
 		[undo registerUndoWithTarget:[self textStorage]
 			selector:@selector(setAttributedString:)
 			object:bufferContentStr];
@@ -159,48 +150,37 @@
 		[super performDragOperation:sender];
 	}
 
-	edited=YES;
-	[[self window] setDocumentEdited:YES];
+	[self setDocumentEdited:YES];
 	return YES;
-}
-
-- (BOOL) dirty
-{
-	return edited;
-}
-
-- (void) setDirty:(BOOL) flag
-{
-	edited=flag;
 }
 
 - (void) insertText: (id)sender
 {
-	edited=YES;
+	[self setDocumentEdited:YES];
 	[super insertText:sender];
 }
 
 - (void) deleteBackward:(id)sender
 {
-	edited=YES;
+	[self setDocumentEdited:YES];
 	[super deleteBackward:sender];
 }
 
 - (void) deleteForward:(id)sender
 {
-	edited=YES;
+	[self setDocumentEdited:YES];
 	[super deleteForward:sender];
 }
 
 - (void) cut:(id)sender
 {
-	edited=YES;
+	[self setDocumentEdited:YES];
 	[super cut:sender];
 }
 
 - (void) paste:(id)sender
 {
-	edited = YES;
+	[self setDocumentEdited:YES];
 	[super paste:sender];
 }
 
@@ -211,6 +191,17 @@
 	} else {
 		isShiftPressed = NO;
 	}
+}
+
+- (BOOL) isDocumentEdited
+{
+	return edited;
+}
+
+- (void) setDocumentEdited: (BOOL) flag
+{
+	[[self window] setDocumentEdited:flag];
+	edited = flag;
 }
 
 @end

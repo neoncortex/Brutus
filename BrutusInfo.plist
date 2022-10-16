@@ -1,112 +1,226 @@
 {
-    ApplicationDescription = "A brutish text editor";
-    ApplicationIcon = "Brutus.png";
-    NSIcon="Brutus.png";
-    ApplicationName = Brutus;
-    ApplicationRelease = 0.1;
-    Authors = "neoncortex";
-    Copyright = "Copyright (C) 2022 by neoncortex";
-    CopyrightDescription = "Released under GPLv2";
-    FullVersionID = 0.1;
-    URL = "";
-    NSTypes = (
-        {
-             NSName = "Pure Text";
-             NSHumanReadableName = "Text Document";
-             NSUnixExtensions = ( * );
-             NSDOSExtensions = ( * );	
-             NSMIMETypes = ( "text/plain" );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "Text";
-             NSHumanReadableName = "Text Document";
-             NSUnixExtensions = ( txt );
-             NSDOSExtensions = ( txt );	
-             NSMIMETypes = ( "text/plain" );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "Rich Text";
-             NSHumanReadableName = "Rich Text Document";
-             NSUnixExtensions = ( rtf );
-             NSDOSExtensions = ( rtf );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "Objective-C source file";
-             NSHumanReadableName = "Objective-C source file";
-             NSUnixExtensions = ( m );
-             NSDOSExtensions = ( m );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "Objective-C header file";
-             NSHumanReadableName = "Objective-C header file";
-             NSUnixExtensions = ( h );
-             NSDOSExtensions = ( h );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "Groff ms Macro file";
-             NSHumanReadableName = "Groff ms Macro file";
-             NSUnixExtensions = ( ms );
-             NSDOSExtensions = ( ms );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "Org file";
-             NSHumanReadableName = "Org";
-             NSUnixExtensions = ( org );
-             NSDOSExtensions = ( org );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "Shell script";
-             NSHumanReadableName = "Shell script";
-             NSUnixExtensions = ( sh );
-             NSDOSExtensions = ( sh );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "Config";
-             NSHumanReadableName = "Configuration file";
-             NSUnixExtensions = ( conf );
-             NSDOSExtensions = ( conf );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "Config";
-             NSHumanReadableName = "Configuration file";
-             NSUnixExtensions = ( ini );
-             NSDOSExtensions = ( ini );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-        {
-             NSName = "C source";
-             NSHumanReadableName = "C source";
-             NSUnixExtensions = ( c );
-             NSDOSExtensions = ( c );
-             NSRole = Editor;
-             NSDocumentClass = Document;
-        },
-    );
-    NSServices = (
-      {
-          NSPortName = Brutus;
-          NSMessage = openFileWithPattern;
-          NSSendTypes = ( NSStringPboardType , NSFilenamesPboardType );
-          NSMenuItem = { default = Brutus; English = Brutus; };
-       },
-    );
+	ApplicationDescription = "A brutish text editor";
+	ApplicationIcon = "Brutus.png";
+	NSIcon="Brutus.png";
+	ApplicationName = Brutus;
+	ApplicationRelease = 0.1;
+	Authors = "neoncortex";
+	Copyright = "Copyright (C) 2022 by neoncortex";
+	CopyrightDescription = "Released under GPLv2";
+	FullVersionID = 0.1;
+	URL = "";
+	NSTypes = (
+	{
+		NSName = "Pure Text";
+		NSHumanReadableName = "Text Document";
+		NSUnixExtensions = ( * );
+		NSDOSExtensions = ( * );	
+		NSMIMETypes = ( "text/plain" );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Text";
+		NSHumanReadableName = "Text Document";
+		NSUnixExtensions = ( txt );
+		NSDOSExtensions = ( txt );	
+		NSMIMETypes = ( "text/plain" );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Rich Text";
+		NSHumanReadableName = "Rich Text Document";
+		NSUnixExtensions = ( rtf );
+		NSDOSExtensions = ( rtf );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Log file";
+		NSHumanReadableName = "Log file";
+		NSUnixExtensions = ( log );
+		NSDOSExtensions = ( log );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Objective-C source file";
+		NSHumanReadableName = "Objective-C source file";
+		NSUnixExtensions = ( m );
+		NSDOSExtensions = ( m );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Objective-C header file";
+		NSHumanReadableName = "Objective-C header file";
+		NSUnixExtensions = ( h );
+		NSDOSExtensions = ( h );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Groff ms Macro file";
+		NSHumanReadableName = "Groff ms Macro file";
+		NSUnixExtensions = ( ms );
+		NSDOSExtensions = ( ms );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Tex source";
+		NSHumanReadableName = "Tex source";
+		NSUnixExtensions = ( tex );
+		NSDOSExtensions = ( tex );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Tex aux";
+		NSHumanReadableName = "Tex aux";
+		NSUnixExtensions = ( aux );
+		NSDOSExtensions = ( aux );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Org file";
+		NSHumanReadableName = "Org";
+		NSUnixExtensions = ( org );
+		NSDOSExtensions = ( org );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Shell script";
+		NSHumanReadableName = "Shell script";
+		NSUnixExtensions = ( sh );
+		NSDOSExtensions = ( sh );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Config";
+		NSHumanReadableName = "Configuration file";
+		NSUnixExtensions = ( conf );
+		NSDOSExtensions = ( conf );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Config";
+		NSHumanReadableName = "Configuration file";
+		NSUnixExtensions = ( ini );
+		NSDOSExtensions = ( ini );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "C source";
+		NSHumanReadableName = "C source";
+		NSUnixExtensions = ( c );
+		NSDOSExtensions = ( c );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "C++ source";
+		NSHumanReadableName = "C++ source";
+		NSUnixExtensions = ( cpp );
+		NSDOSExtensions = ( cpp );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "C++ source";
+		NSHumanReadableName = "C++ source";
+		NSUnixExtensions = ( c++ );
+		NSDOSExtensions = ( c++ );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Assembly source";
+		NSHumanReadableName = "Assembly source";
+		NSUnixExtensions = ( s );
+		NSDOSExtensions = ( s );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Assembly source";
+		NSHumanReadableName = "Assembly source";
+		NSUnixExtensions = ( asm );
+		NSDOSExtensions = ( asm );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Lua source";
+		NSHumanReadableName = "C source";
+		NSUnixExtensions = ( lua );
+		NSDOSExtensions = ( lua );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "XML";
+		NSHumanReadableName = "XML File";
+		NSUnixExtensions = ( xml );
+		NSDOSExtensions = ( xml );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "HTML";
+		NSHumanReadableName = "HTML File";
+		NSUnixExtensions = ( html );
+		NSDOSExtensions = ( html );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "CSS";
+		NSHumanReadableName = "CSS File";
+		NSUnixExtensions = ( css );
+		NSDOSExtensions = ( css );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Javascript source";
+		NSHumanReadableName = "Javascript source";
+		NSUnixExtensions = ( js );
+		NSDOSExtensions = ( js );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Java source";
+		NSHumanReadableName = "Java source";
+		NSUnixExtensions = ( java );
+		NSDOSExtensions = ( java );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	{
+		NSName = "Java class source";
+		NSHumanReadableName = "Java source";
+		NSUnixExtensions = ( class );
+		NSDOSExtensions = ( class );
+		NSRole = Editor;
+		NSDocumentClass = Document;
+	},
+	);
+	NSServices = (
+	{
+		NSPortName = Brutus;
+		NSMessage = openFileWithPattern;
+		NSSendTypes = ( NSStringPboardType , NSFilenamesPboardType );
+		NSMenuItem = { default = Brutus; English = Brutus; };
+	},
+	);
+
 }
+

@@ -275,5 +275,5 @@ You can select a file in
 .B GWorkspace ,
 or some file name in the
 .B Terminal ,
-for example, andsend it to this service.
+for example, and send it to this service.
 These files will be opened for editing.

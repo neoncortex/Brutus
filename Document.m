@@ -222,7 +222,7 @@
 		[self saveDocumentAs:self];
 	}
 
-	[[buffer window] setDocumentEdited:NO];
+	[buffer setDocumentEdited:NO];
 }
 
 - (void) saveDocumentAs: (id)sender
@@ -246,7 +246,7 @@
 	[util release];
 	[self setDocumentPath:path];
 	[[buffer window] setTitle: [self getDocumentPath]];
-	[[buffer window] setDocumentEdited:NO];
+	[buffer setDocumentEdited:NO];
 }
 
 - (void) saved: (id)sender
@@ -257,7 +257,7 @@
 			[[buffer textStorage] beginEditing];
 			[buffer setString: content];
 			[[buffer textStorage] endEditing];
-			[[buffer window] setDocumentEdited:NO];
+			[buffer setDocumentEdited:NO];
 		}
 	} else {
 		NSRunAlertPanel(_(@"Error"),

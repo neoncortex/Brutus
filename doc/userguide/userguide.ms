@@ -22,20 +22,28 @@ This give the user a huge flexibility in it's editing operations, and avoid code
 Why the name?
 .LP
 Because it's barebones.
-There is no syntax, no bells, and it does not do much besides presenting, and organizing text, and text files and windows.
+There is no syntax, no bells, and it does not do much besides presenting, and organizing text, text files and windows.
 It's brute.
 .
 .NH
 The Brutus interface:
 .LP
-.PSPIC -C img/brutus.ps 5i 5i"
+.PSPIC -C img/brutus.ps 5i 5i
 .
 .LP
-The interface consists of two text areas, and some buttons.
+The main interface consists of two text areas, and some buttons.
 The text area on top is the
 .I "command area" .
 This is where commands are inserted.
 The buttons on the top control, and execute actions based on the content, or text selection, in the command area.
+.
+.NH 2
+The Menu:
+.LP
+.PSPIC -C img/menu.ps 3i 3i
+.
+.LP
+The Menu allows the user to do the most basic operations, like open files, navigate between the windows, save, etc.
 .
 .NH 2
 The Cmd button:
@@ -92,7 +100,7 @@ The Keep Button prevents the contents of the command area to be erased between c
 .NH
 The command area:
 .LP
-.PSPIC -C img/commandarea.ps 5i 5i"
+.PSPIC -C img/commandarea.ps 5i 5i
 .
 .LP
 This is where commands are inserted, and executed.
@@ -120,7 +128,7 @@ Write in the command area \F[C]ls\F[], check the
 .I Show
 button, and click run.
 You should see this:
-.PSPIC -C img/ls-result.ps 5i 5i"
+.PSPIC -C img/ls-result.ps 5i 5i
 .
 .NH
 Substitute text using commands:
@@ -148,7 +156,7 @@ click the Ed button
 .
 .LP
 You should see this:
-.PSPIC -C img/substitution.ps 5i 5i"
+.PSPIC -C img/substitution.ps 5i 5i
 .
 .LP
 Notice the word default, on line 3, that's now capitalized.
@@ -162,7 +170,7 @@ i\\\\
 Reminder
 .CODEE
 You should see this:
-.PSPIC -C img/g.ps 5i 5i"
+.PSPIC -C img/g.ps 5i 5i
 .
 .NH
 Opening files from results of commands:
@@ -187,12 +195,12 @@ grep -n '^[+-]'
 .LP
 Type this in the command area, enable Show, and click Cmd.
 You should see this:
-.PSPIC -C img/navigation.ps 5i 5i"
+.PSPIC -C img/navigation.ps 5i 5i
 .
 .LP
 From there, you can highlight a line number (the number before \F[C]:\F[]), or the line contents (the string after \F[C]:\F[]), and click match.
 You should see this:
-.PSPIC -C img/navigation2.ps 5i 5i"
+.PSPIC -C img/navigation2.ps 5i 5i
 .
 .LP
 Where I selected \F[C]68\F[] in the commabd area, and clicked the Match button.

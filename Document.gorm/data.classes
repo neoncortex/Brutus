@@ -27,7 +27,8 @@
 	    keep,
 	    command,
 	    buffer,
-	    commandIndicator
+	    commandIndicator,
+	    newLine
 	);
 	Super = NSObject;
     };

@@ -61,10 +61,11 @@
 		for (i = 0; i < [a count]; ++i) {
 			lines = [lines stringByAppendingString:
 				[a objectAtIndex:i]];
-/*
-			lines = [lines stringByAppendingString:
-				@"\n"];
-*/
+
+			if ([[newLine stringValue] isEqualToString: @"1"]) {
+				lines = [lines stringByAppendingString:
+					@"\n"];
+			}
 		}
 	}
 

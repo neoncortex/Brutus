@@ -8,6 +8,7 @@
 	id command;
 	id keep;
 	id show;
+	id newLine;
 @private
 	NSString *tempFileName;
 	NSString *tempResult;

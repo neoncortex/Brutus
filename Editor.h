@@ -14,6 +14,7 @@
 	NSString *tempScript;
 	NSString *lastCommand;
 	NSString *lastResult;
+	NSString *logCommands;
 	NSTimer *timer;
 	NSTask *task;
 }
@@ -25,6 +26,7 @@
 - (void) last: (id)sender;
 - (void) result: (id)sender;
 - (void) match: (id)sender;
+- (void) log: (id)sender;
 - (void) openFromCommandAreaSelection: (id)sender;
 
 @end

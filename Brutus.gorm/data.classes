@@ -11,7 +11,8 @@
     };
     FirstResponder = {
 	Actions = (
-	    "name:"
+	    "name:",
+	    "showLogWindow:"
 	);
 	Super = NSObject;
     };

@@ -83,19 +83,24 @@ The Match button:
 The Match button match a selection from the command area on the text.
 .
 .NH 2
-The Open Button:
+The Open button:
 .LP
-The Open Button open files from the selected filenames in the command area.
+The Open button open files from the selected filenames in the command area.
 .
 .NH 2
-The Show Button:
+The Show button:
 .LP
-The Show Button redirects the result of the commands to the command area, instead of applying in the text.
+The Show button redirects the result of the commands to the command area, instead of applying in the text.
 .
 .NH 2
-The Keep Button:
+The Keep button:
 .LP
-The Keep Button prevents the contents of the command area to be erased between commands.
+The Keep button prevents the contents of the command area to be erased between commands.
+.
+.NH 2
+The Log button:
+.LP
+The Log button place a log of the executed commands, together with it's results, in the command area.
 .
 .NH
 The command area:
@@ -118,6 +123,84 @@ button execute system commands, and the
 button executes \F[C]ed\F[] commands.
 Examples will be given in the next sections.
 .
+.NH
+How the shell commands work?
+.LP
+Shell commands (commands executed with the Cmd button) can be executed in two different ways.
+The first way, when you just type the commands in the command area, is equivalent to:
+.CODE
+cat '/path/to/tempfile' | command 1> '/path/to/tempresult' 2>> '/path/to/tempresult'; \\
+	mv '/paht/to/tempresult' '/path/to/tempfile'
+.CODEE
+.
+.LP
+Where
+.I /path/to/tempfile
+is
+.I /tmp/.brutus_temp ,
+.I /path/to/tempresult
+is /tmp/.brutus_command_result ,
+and
+.I command
+is the command inserted in the command area.
+This shell code is placed in a shell script file, called
+.I /tmp/.brutus_script.sh ,
+and after it's execution, the results are read, from
+.I /tmp/.brutus_temp .
+.
+.LP
+The second way, is when you have a \F[C]!\F[] before the command, for example:
+.CODE
+!ls
+.CODEE
+.
+.LP
+This is the same as the first way, but without the \F[C]cat\F[] pipe part, like:
+.CODE
+command 1> '/path/to/tempresult' 2>> '/path/to/tempresult'; \\
+	mv '/paht/to/tempresult' '/path/to/tempfile'
+.CODEE
+.
+.LP
+All the commands are executed in the directory that contains the file opened, that means, for the file
+.I /etc/lynx/lynx.cfg ,
+for example, commands will be executed in
+.I /etc/lynx/ .
+.
+.NH 2
+Variables:
+.LP
+These variables are available to be used in system commands:
+.IP \[bu]
+%file%
+.IP \[bu]
+%dir%
+.
+.LP
+The variable
+.I %file%
+will be substituted by the file name of the file being edited, and
+.I %dir%
+will be substituted by the directory that contain this file.
+For example:
+.CODE
+mv /path/to/some/file %dir%
+.CODEE
+.
+.LP
+On most situations,
+.I $PWD
+would be used instead, but it is useful to have the directory of the file stored, depending of what you are doing, it's less one thing to store in case your commands changes to some other directory.
+.
+.LP
+The
+.I %file%
+variable works the same way:
+.CODE
+echo %file%
+.CODEE
+.
+
 .NH
 View results of commands:
 .
@@ -203,7 +286,7 @@ You should see this:
 .PSPIC -C img/navigation2.ps 5i 5i
 .
 .LP
-Where I selected \F[C]68\F[] in the commabd area, and clicked the Match button.
+Where I selected \F[C]48\F[] in the commabd area, and clicked the Match button.
 .
 .NH
 Drag & Drop:

@@ -8,7 +8,6 @@
 	id buffer;
 	id command;
 	id keep;
-	id historyWindow;
 @private
 	id fileToOpen;
 	id argument;

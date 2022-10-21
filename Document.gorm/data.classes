@@ -19,7 +19,8 @@
 	    "result:",
 	    "stop:",
 	    "openFromCommandAreaSelection:",
-	    "match:"
+	    "match:",
+	    "log:"
 	);
 	Outlets = (
 	    show,
@@ -37,6 +38,7 @@
 	    "editEd:",
 	    "last:",
 	    "match:",
+	    "log:",
 	    "openFromCommandAreaSelection:",
 	    "result:",
 	    "saved:"

@@ -5,4 +5,5 @@
 @interface Controller : NSDocumentController
 {
 }
+
 @end

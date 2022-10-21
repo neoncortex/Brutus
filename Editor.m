@@ -14,6 +14,7 @@
 	[NSApp setServicesProvider:self];
 	lastCommand = @"";
 	lastResult = @"";
+	logCommands = @"";
 	timer = nil;
 	task = nil;
 	tempFileName = @"/tmp/.brutus_temp";
@@ -32,6 +33,9 @@
 	if (timer != nil)
 		[timer invalidate];
 
+	[lastResult release];
+	[lastCommand release];
+	[logCommands release];
 	[super dealloc];
 }
 
@@ -57,8 +61,10 @@
 		for (i = 0; i < [a count]; ++i) {
 			lines = [lines stringByAppendingString:
 				[a objectAtIndex:i]];
+/*
 			lines = [lines stringByAppendingString:
 				@"\n"];
+*/
 		}
 	}
 
@@ -130,44 +136,111 @@
 	[util release];
 }
 
+- (void) registerLog: (NSString *) entry
+{
+	NSString *content = logCommands;
+	content = [content stringByAppendingString:@"========\n"];
+	content = [content stringByAppendingString:entry];
+	content = [content stringByAppendingString:@"\n"];
+	[logCommands release];
+	logCommands = content;
+	[logCommands retain];
+}
+
 - (void) assembleEdScript: (NSString *)c
 {
 	NSString *dir = @"";
-	NSString *fileName = [[buffer window] representedFilename];
-	if (fileName != nil)
-		dir = fileName;
-	else
-		dir = tempFileName;
+	NSString *fileName = [[[NSDocumentController sharedDocumentController]
+		currentDocument] getDocumentPath];
+	if ((fileName != nil) && (![fileName isEqualToString:@"Window"]))
+		dir = [fileName stringByDeletingLastPathComponent];
+	else {
+		dir = [tempFileName stringByDeletingLastPathComponent];
+		fileName = tempFileName;
+	}
 
 	NSString *shell = [NSString stringWithFormat:
-		@"cd \"$(dirname %@)\" ; ed %@ << EOF\n%@\nw\nEOF"
+		@"cd '%@' ; ed %@ << EOF\n%@\nw\nEOF"
 		,dir
 		,tempFileName
-		,c
-	];
+		,c];
+	[self registerLog:c];
 	[shell writeToFile:tempScript atomically:YES];
+}
+
+- (NSMutableString *) substituteForCommand: (NSMutableString *)cm string:(NSString *)a
+	withString:(NSString *)b
+{
+	NSError *regexError = 0;
+	NSRegularExpression *regex = [NSRegularExpression
+		regularExpressionWithPattern: a
+		options:0
+		error:&regexError];
+	if (regexError)
+		return cm;
+
+	NSUInteger n = [regex numberOfMatchesInString: cm
+		options:0
+		range:NSMakeRange(0, [cm length])];
+
+	int i;
+	for (i = 0; i < n; i++) {
+		NSRange r = [regex rangeOfFirstMatchInString:cm
+			options:0
+			range:NSMakeRange(0, [cm length])];
+		[cm replaceCharactersInRange:r withString:b];
+	}
+
+	return cm;
 }
 
 - (void) assembleCommandScript: (NSString *)c
 {
-	NSString *dir = @"";
-	NSString *fileName = [[buffer window] representedFilename];
-	if (fileName != nil)
-		dir = fileName;
-	else
-		dir = tempFileName;
+	BOOL noPipe = NO;
+	if ([[c substringToIndex:1] isEqualToString: @"!"]) {
+		c = [c substringFromIndex:1];
+		noPipe = YES;
+	}
 
+	NSMutableString *cm = [[NSMutableString alloc] initWithString:c];
+	NSString *dir = @"";
+	NSString *fileName = [[[NSDocumentController sharedDocumentController]
+		currentDocument] getDocumentPath];
+	if ((fileName != nil) && (![fileName isEqualToString:@"Window"]))
+		dir = [fileName stringByDeletingLastPathComponent];
+	else {
+		dir = [tempFileName stringByDeletingLastPathComponent];
+		fileName = tempFileName;
+	}
+
+	cm = [self substituteForCommand:cm string:@"\%file\%" withString:fileName];
+	cm = [self substituteForCommand:cm string:@"\%dir\%" withString:dir];
+	NSString *cmd = @"cd '%@'; cat '%@' | %@ 1> '%@' 2>> '%@' ; mv '%@' '%@'";
 	NSString *shell = [NSString stringWithFormat:
-		@"cd \"$(dirname %@)\"; cat '%@' | %@ 1> %@ 2>> %@ ; mv %@ %@"
+		cmd
 		,dir
 		,tempFileName
-		,c
+		,cm
 		,tempResult
 		,tempResult
 		,tempResult
-		,tempFileName
-	];
+		,tempFileName];
+
+	if (noPipe) {
+		cmd = @"cd '%@'; %@ 1> '%@' 2>> '%@' ; mv '%@' '%@'";
+		shell = [NSString stringWithFormat:
+			cmd
+			,dir
+			,cm
+			,tempResult
+			,tempResult
+			,tempResult
+			,tempFileName];
+	}
+
+	[self registerLog:cm];
 	[shell writeToFile:tempScript atomically:YES];
+	[cm release];
  }
 
 - (void) isTaskFinished
@@ -185,6 +258,7 @@
 			[content retain];
 			lastResult = content;
 			[self replaceContent:content];
+			[self registerLog:content];
 		}
 
 		[command setEditable:YES];
@@ -301,6 +375,11 @@
 	Util *util = [[Util alloc] init];
 	[util findContent:d content:selection];
 	[util release];
+}
+
+- (void) log: (id) sender
+{
+	[command setString:logCommands];
 }
 
 - (void) openFileWithPattern:(NSPasteboard *)pboard userData:(NSString *)

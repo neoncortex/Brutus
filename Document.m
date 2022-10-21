@@ -16,7 +16,6 @@
 - (id) init
 {
 	self = [super init];
-	[historyWindow _setVisible:NO];
 	return self;
 }
 
@@ -171,34 +170,24 @@
 
 - (void) openDocument: (id)sender
 {
-	Rtf *rtf = [[Rtf alloc] init];
 	NSOpenPanel *openDialog = [NSOpenPanel openPanel];
+	[openDialog setAllowsMultipleSelection:YES];
 	[openDialog runModal];
-	NSString *res = [[openDialog filenames] objectAtIndex:0];
-	if (res == nil)
-		return;
-
+	NSArray *fileNames = [openDialog filenames];
+	int i;
 	Util *util = [[Util alloc] init];
-	res = [util validateFile:res];
-	if (res == nil)
-		return;
-
-	[self setDocumentPath:res];
-	if ([[util getFileExtension:[self getDocumentPath]] isEqualToString:@"rtf"]) {
-		[rtf loadDocumentRtf:[self getDocumentPath] view:buffer];
-	} else {
-		NSString *content = [self loadContentFromFile:[self getDocumentPath]];
-		if (content != nil) {
-			[buffer setString:content];
+	for (i = 0; i < [fileNames count]; ++i) {
+		NSString *filePath = [fileNames objectAtIndex:i];
+		filePath = [util validateFile:filePath];
+		if (filePath != nil) {
+			id d = [[NSDocumentController sharedDocumentController]
+				openDocumentWithContentsOfFile:filePath
+				display:YES];
+			[d setDocumentPath: filePath];
 		}
 	}
 
-	[[buffer window] makeFirstResponder:buffer];
-	[[buffer window] setTitle: [self getDocumentPath]];
-	[rtf release];
 	[util release];
-	[[buffer window] setDocumentEdited:NO];
-
 }
 
 - (void) saveDocument: (id)sender
@@ -233,6 +222,13 @@
 	[openDialog runModal];
 	NSURL *res = [openDialog URL];
 	NSString *path = [res pathWithEscapes];
+	NSError *fileError = 0;
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSDictionary *dict = [fm attributesOfItemAtPath:path
+		error:&fileError];
+	if ([dict fileType] == NSFileTypeDirectory)
+		return;
+
 	Rtf *rtf = [[Rtf alloc] init];
 	Util *util = [[Util alloc] init];
 	if (![[util getFileExtension: [self getDocumentPath]] isEqualToString:@"rtf"]) {

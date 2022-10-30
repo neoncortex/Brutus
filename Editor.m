@@ -17,9 +17,16 @@
 	logCommands = @"";
 	timer = nil;
 	task = nil;
+	selectedLines = @"";
 	tempFileName = @"/tmp/.brutus_temp";
 	tempResult = @"/tmp/.brutus_command_result";
 	tempScript = @"/tmp/.brutus_script.sh";
+	registers = [[NSMutableArray alloc] initWithCapacity:5];
+	locations = [[NSMutableArray alloc] initWithCapacity:5];
+	[registers addObjectsFromArray:[NSArray arrayWithObjects:
+		@"",@"",@"",@"",@"",nil]];
+	[locations addObjectsFromArray:[NSArray arrayWithObjects:
+		@"",@"",@"",@"",@"",nil]];
 	return self;
 }
 
@@ -36,6 +43,14 @@
 	[lastResult release];
 	[lastCommand release];
 	[logCommands release];
+	for (NSString *s in registers)
+		[s release];
+
+	for (NSString *s in locations)
+		[s release];
+
+	[registers release];
+	[locations release];
 	[super dealloc];
 }
 
@@ -62,7 +77,8 @@
 			lines = [lines stringByAppendingString:
 				[a objectAtIndex:i]];
 
-			if ([[newLine stringValue] isEqualToString: @"1"]) {
+			if (([[newLine stringValue] isEqualToString: @"1"])
+			&& (i < ([a count] -1))) {
 				lines = [lines stringByAppendingString:
 					@"\n"];
 			}
@@ -148,27 +164,6 @@
 	[logCommands retain];
 }
 
-- (void) assembleEdScript: (NSString *)c
-{
-	NSString *dir = @"";
-	NSString *fileName = [[[NSDocumentController sharedDocumentController]
-		currentDocument] getDocumentPath];
-	if ((fileName != nil) && (![fileName isEqualToString:@"Window"]))
-		dir = [fileName stringByDeletingLastPathComponent];
-	else {
-		dir = [tempFileName stringByDeletingLastPathComponent];
-		fileName = tempFileName;
-	}
-
-	NSString *shell = [NSString stringWithFormat:
-		@"cd '%@' ; ed %@ << EOF\n%@\nw\nEOF"
-		,dir
-		,tempFileName
-		,c];
-	[self registerLog:c];
-	[shell writeToFile:tempScript atomically:YES];
-}
-
 - (NSMutableString *) substituteForCommand: (NSMutableString *)cm string:(NSString *)a
 	withString:(NSString *)b
 {
@@ -195,6 +190,43 @@
 	return cm;
 }
 
+- (NSMutableString*) substitutions: (NSMutableString *)cm fileName:(NSString *)f dir:(NSString *)d
+{
+	cm = [self substituteForCommand:cm string:@"\%file\%" withString:f];
+	cm = [self substituteForCommand:cm string:@"\%dir\%" withString:d];
+	cm = [self substituteForCommand:cm string:@"\%sel\%" withString:selectedLines];
+	cm = [self substituteForCommand:cm string:@"\%r1\%" withString:[registers objectAtIndex:0]];
+	cm = [self substituteForCommand:cm string:@"\%r2\%" withString:[registers objectAtIndex:1]];
+	cm = [self substituteForCommand:cm string:@"\%r3\%" withString:[registers objectAtIndex:2]];
+	cm = [self substituteForCommand:cm string:@"\%r4\%" withString:[registers objectAtIndex:3]];
+	cm = [self substituteForCommand:cm string:@"\%r5\%" withString:[registers objectAtIndex:4]];
+	return cm;
+}
+
+- (void) assembleEdScript: (NSString *)c
+{
+	NSString *dir = @"";
+	NSString *fileName = [[[NSDocumentController sharedDocumentController]
+		currentDocument] getDocumentPath];
+	if ((fileName != nil) && (![fileName isEqualToString:@"Window"]))
+		dir = [fileName stringByDeletingLastPathComponent];
+	else {
+		dir = [tempFileName stringByDeletingLastPathComponent];
+		fileName = tempFileName;
+	}
+
+	NSMutableString *cm = [[NSMutableString alloc] initWithString:c];
+	cm = [self substitutions:cm fileName:fileName dir:dir];
+	NSString *shell = [NSString stringWithFormat:
+		@"cd '%@' ; ed %@ << EOF\n%@\nw\nEOF"
+		,dir
+		,tempFileName
+		,cm];
+	[self registerLog:cm];
+	[shell writeToFile:tempScript atomically:YES];
+	[cm release];
+}
+
 - (void) assembleCommandScript: (NSString *)c
 {
 	BOOL noPipe = NO;
@@ -214,8 +246,7 @@
 		fileName = tempFileName;
 	}
 
-	cm = [self substituteForCommand:cm string:@"\%file\%" withString:fileName];
-	cm = [self substituteForCommand:cm string:@"\%dir\%" withString:dir];
+	cm = [self substitutions:cm fileName:fileName dir:dir];
 	NSString *cmd = @"cd '%@'; cat '%@' | %@ 1> '%@' 2>> '%@' ; mv '%@' '%@'";
 	NSString *shell = [NSString stringWithFormat:
 		cmd
@@ -270,14 +301,19 @@
 
 - (void) editText: (int) action
 {
+	NSString *c = [command string];
+	if ([c isEqualToString:@""])
+		return;
+
 	[command setEditable:NO];
 	[command setTextColor:[NSColor lightGrayColor]];
-	NSString *c = [command string];
 	[lastCommand release];
 	lastCommand = [[NSString alloc] initWithString: c];
 	NSString *shell = @"/usr/bin/bash";
-	NSString *lines = [self filterContent:buffer];
-	[lines writeToFile:tempFileName atomically:YES];
+	[selectedLines release];
+	selectedLines = [self filterContent:buffer];
+	[selectedLines retain];
+	[selectedLines writeToFile:tempFileName atomically:YES];
 	if (action == 1)
 		[self assembleEdScript:c];
 	else if (action == 2)
@@ -381,6 +417,84 @@
 - (void) log: (id) sender
 {
 	[command setString:logCommands];
+}
+
+- (void) setValue:(id)sender for:(int)item
+{
+	NSRange range = [command selectedRange];
+	NSString *selection = [[command string]
+		substringWithRange:
+		NSMakeRange(range.location,
+		range.length)];
+	if (selection.length == 0) {
+		range = [buffer selectedRange];
+		selection = [[buffer string]
+			substringWithRange:
+			NSMakeRange(range.location,
+			range.length)];
+	}
+
+	NSMutableArray *a = nil;
+	switch(item) {
+	case 0:
+		a = registers;
+		break;
+	case 1:
+		a = locations;
+		break;
+	}
+
+	if (a != nil) {
+		[[a objectAtIndex:[sender tag]] release];
+		[a replaceObjectAtIndex:[sender tag] withObject:selection];
+		[[a objectAtIndex:[sender tag]] retain];
+	}
+}
+
+- (void) showRegisters: (id)sender
+{
+	[command setString:[NSString stringWithFormat:
+		@"registers:\n1:%@\n2:%@\n3:%@\n4:%@\n5:%@\n"
+		,[registers objectAtIndex:0]
+		,[registers objectAtIndex:1]
+		,[registers objectAtIndex:2]
+		,[registers objectAtIndex:3]
+		,[registers objectAtIndex:4]]];
+}
+
+- (void) setRegister: (id)sender
+{
+	[self setValue:sender for:0];
+}
+
+- (void) getRegister: (id)sender
+{
+	[self replaceContent:[registers objectAtIndex:[sender tag]]];
+}
+
+- (void) showLocations: (id)sender
+{
+	[command setString:[NSString stringWithFormat:
+		@"locations:\n1:%@\n2:%@\n3:%@\n4:%@\n5:%@\n"
+		,[locations objectAtIndex:0]
+		,[locations objectAtIndex:1]
+		,[locations objectAtIndex:2]
+		,[locations objectAtIndex:3]
+		,[locations objectAtIndex:4]]];
+}
+
+- (void) setLocation: (id)sender
+{
+	[self setValue:sender for:1];
+}
+
+- (void) goToLocation: (id)sender
+{
+	Util *util = [[Util alloc] init];
+	id d = [[NSDocumentController sharedDocumentController]
+		currentDocument];
+	[util findContent:d content:[locations objectAtIndex:[sender tag]]];
+	[util release];
 }
 
 - (void) openFileWithPattern:(NSPasteboard *)pboard userData:(NSString *)

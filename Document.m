@@ -5,6 +5,7 @@
 #import "Rtf.h"
 #import "Util.h"
 #import "TextView.h"
+#import "Editor.h"
 
 @implementation Document
 
@@ -103,8 +104,9 @@
 		stringContent = [[NSString alloc] initWithData:data
 			encoding:NSUTF8StringEncoding];
 		if (stringContent == nil) {
-			stringContent = [[NSString alloc] initWithData:data
-				encoding:NSNEXTSTEPStringEncoding];
+			stringContent = [[[NSString alloc] initWithData:data
+				encoding:NSNEXTSTEPStringEncoding]
+				autorelease];
 		}
 	}
 
@@ -303,6 +305,36 @@
 		owner: nil];
 	[pboard setString: name forType:NSStringPboardType];
 	[pboard setString: name forType:NSFilenamesPboardType];
+}
+
+- (void) showRegisters: (id)sender
+{
+	[editor showRegisters:sender];
+}
+
+- (void) getRegister: (id)sender
+{
+	[editor getRegister:sender];
+}
+
+- (void) setRegister: (id)sender
+{
+	[editor setRegister:sender];
+}
+
+- (void) showLocations: (id)sender
+{
+	[editor showLocations:sender];
+}
+
+- (void) setLocation: (id)sender
+{
+	[editor setLocation:sender];
+}
+
+- (void) goToLocation: (id)sender
+{
+	[editor goToLocation:sender];
 }
 
 @end

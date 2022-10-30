@@ -10,6 +10,7 @@
 	id show;
 	id newLine;
 @private
+	NSString *selectedLines;
 	NSString *tempFileName;
 	NSString *tempResult;
 	NSString *tempScript;
@@ -18,6 +19,8 @@
 	NSString *logCommands;
 	NSTimer *timer;
 	NSTask *task;
+	NSMutableArray *registers;
+	NSMutableArray *locations;
 }
 
 - (void) editEd: (id)sender;
@@ -29,5 +32,10 @@
 - (void) match: (id)sender;
 - (void) log: (id)sender;
 - (void) openFromCommandAreaSelection: (id)sender;
-
+- (void) showRegisters: (id)sender;
+- (void) getRegister: (id)sender;
+- (void) setRegister: (id)sender;
+- (void) showLocations: (id)sender;
+- (void) goToLocation: (id)sender;
+- (void) setLocation: (id)sender;
 @end

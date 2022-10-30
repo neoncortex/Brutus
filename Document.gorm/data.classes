@@ -6,7 +6,8 @@
 	);
 	Outlets = (
 	    buffer,
-	    command
+	    command,
+	    editor
 	);
 	Super = NSDocument;
     };

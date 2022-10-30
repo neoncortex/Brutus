@@ -11,8 +11,14 @@
     };
     FirstResponder = {
 	Actions = (
+	    "getRegister:",
 	    "name:",
-	    "showLogWindow:"
+	    "goToLocation:",
+	    "setLocation:",
+	    "setRegister:",
+	    "showLocations:",
+	    "showLogWindow:",
+	    "showRegisters:"
 	);
 	Super = NSObject;
     };
